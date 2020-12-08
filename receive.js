@@ -20,7 +20,6 @@ async function main(handleEvent) {
     {
       processEvents: async (events, context) => {
         let currentBuffer = [];
-        console.log(context.partitionId, events);
         for (const event of events) {
           if (event && event.body) {
             if (context.partitionId == 1) {
