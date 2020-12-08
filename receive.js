@@ -55,5 +55,6 @@ async function main(handleEvent = (v) => console.log(v)) {
     {startPosition: earliestEventPosition},
   );
 }
-main();
-// module.exports = main;
+
+module.exports = main;
+
