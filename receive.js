@@ -1,3 +1,4 @@
+require('dotenv').config()
 const {Buffer} = require('buffer');
 const zlib = require('zlib');
 const {
@@ -9,14 +10,22 @@ const connectionString = process.env.FR_CONNECTION_STRING;
 const eventHubName = process.env.FR_EVENT_HUB_NAME;
 const consumerGroup = process.env.FR_CONSUMER_GROUP;
 
-async function main(handleEvent) {
+async function main(handleEvent = (v) => console.log(v)) {
   const consumerClient = new EventHubConsumerClient(
     consumerGroup,
     connectionString,
     eventHubName,
   );
-
-  const subscription = consumerClient.subscribe(
+  let flightData = {};
+  const getFinalData = (newData) => {
+    if (!newData || typeof newData !== 'object') return flightData;
+    const newValues = Object.values(newData).filter((newVal) => Array.isArray(newVal));
+    newValues.map((fData) => {
+      flightData[fData[9]] = fData;
+    });
+    return flightData;
+  }
+  consumerClient.subscribe(
     {
       processEvents: async (events, context) => {
         let currentBuffer = [];
@@ -31,7 +40,8 @@ async function main(handleEvent) {
                 if (err) {
                   console.log('err', err);
                 } else {
-                    handleEvent(buf.toString());
+                    const inflated = JSON.parse(buf.toString());
+                    handleEvent(getFinalData(inflated));
                 }
               });
             }
@@ -45,5 +55,5 @@ async function main(handleEvent) {
     {startPosition: earliestEventPosition},
   );
 }
-
-module.exports = main;
+main();
+// module.exports = main;
