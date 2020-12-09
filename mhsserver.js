@@ -6,9 +6,9 @@ var receive = require('./receive.js');
 let currentData = '';
 receive((newData) => currentData=newData);
 
-app.get("/flightdatatest", (req, res, next) => {
+app.get("/maverickhelicopters", (req, res, next) => {
  res.json(currentData);
 });
-app.listen(3333, () => {
- console.log("Server running on port 3333");
+app.listen(3000, () => {
+ console.log("Server running on port 3000");
 });

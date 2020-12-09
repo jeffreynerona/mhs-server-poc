@@ -2,7 +2,7 @@
   "name": "mhs-server",
   "version": "1.0.0",
   "description": "simple server for flightradar data",
-  "main": "index.js",
+  "main": "mhsserver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
